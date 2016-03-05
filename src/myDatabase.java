@@ -30,6 +30,18 @@ public class myDatabase {
 			else if(command.equals("SET")){
 				name = dbIn.next();
 				value = dbIn.nextInt();
+				
+				if(database.containsKey(name) == true){
+					int oldValue = database.get(name);
+					int count = dbCount.get(oldValue);
+					count --;
+					
+					if(count > 0)
+						dbCount.put(oldValue, count);
+					else
+						dbCount.remove(oldValue);
+				}
+					
 				database.put(name, value);
 				
 				if(dbCount.containsKey(value)){
@@ -39,9 +51,6 @@ public class myDatabase {
 				}
 				else
 					dbCount.put(value, 1);
-				
-				System.out.println("Successfully inserted: " + name + " with value " + value);
-				
 			}		
 			else if(command.equals("GET")){
 				name = dbIn.next();
@@ -52,7 +61,6 @@ public class myDatabase {
 				else{
 					System.out.println("NULL");
 				}
-				
 			}	
 			else if(command.equals("UNSET")){
 				name = dbIn.next();
