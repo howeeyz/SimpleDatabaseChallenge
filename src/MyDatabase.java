@@ -1,4 +1,6 @@
 import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class MyDatabase {
 	
@@ -9,10 +11,26 @@ public class MyDatabase {
 		Stack<String> history = null;
 		Stack<Stack<String>> historyList = new Stack<Stack<String>>(); 
 		
-		Scanner dbIn = new Scanner(System.in);
+		Scanner dbIn;
 		String command;
 		String name;
 		int value;
+		
+		Boolean historyListChange = false;
+		
+		File text;
+		if(args.length > 0){
+			text = new File(args[0]);
+			try{
+				dbIn = new Scanner(text);
+			} catch (FileNotFoundException e) {
+				System.out.println("File not found. Exiting.");
+				return;
+			}
+		}
+		else{
+			dbIn = new Scanner(System.in);
+		}
 		
 		while(true){
 			command = dbIn.next(); 
@@ -27,7 +45,7 @@ public class MyDatabase {
 				name = dbIn.next();
 				value = dbIn.nextInt();
 				
-				
+				historyListChange = true;
 				
 				//If this key already exists, need to update the number counter
 				if(database.containsKey(name) == true){
@@ -35,7 +53,6 @@ public class MyDatabase {
 					
 					//For keeping history in case of rollback
 					if(history != null){
-						System.out.println("PUSHING A CHANGE SET STATEMENT");
 						history.push("SET " + name + " " + oldValue);
 					}
 					
@@ -50,7 +67,6 @@ public class MyDatabase {
 				else{
 					//For keeping history in case of rollback
 					if(history != null){
-						System.out.println("PUSHING AN UNSET STATEMENT");
 						history.push("UNSET " + name);
 					}
 				}
@@ -83,6 +99,8 @@ public class MyDatabase {
 			}
 			
 			else if(command.equals("UNSET")){
+				
+				historyListChange = true;
 				//Take in value
 				name = dbIn.next();
 				
@@ -95,7 +113,6 @@ public class MyDatabase {
 					
 					//For keeping history in case of rollback
 					if(history != null){
-						System.out.println("PUSHING A SET STATEMENT");
 						history.push("SET " + name + " " + value);
 					}
 					
@@ -135,12 +152,14 @@ public class MyDatabase {
 					String fullCommand;
 					String delims = "[ ]+";
 					
+					if(history.empty() == true)
+						System.out.println("NO TRANSACTION");
+					
 					while(history.empty() == false){
 						fullCommand = history.pop();
 						String[] arguments = fullCommand.split(delims);
 						
 						if(arguments[0].equals("SET")){
-							System.out.println("SETTING SOMETHING!");
 							name = arguments[1];
 							value = Integer.parseInt(arguments[2]);
 							
@@ -169,7 +188,6 @@ public class MyDatabase {
 								dbCount.put(value, 1);
 						}
 						else if(arguments[0].equals("UNSET")){
-							System.out.println("UNSETTING SOMETHING!");
 							name = arguments[1];
 							
 							if(database.containsKey(name)){
@@ -191,7 +209,9 @@ public class MyDatabase {
 					if(historyList.empty() == false){
 						history = historyList.pop();
 					}
-				}	
+				}
+				else
+					System.out.println("NO TRANSACTION");
 			}
 			
 			else if(command.equals("COMMIT")){
@@ -199,6 +219,11 @@ public class MyDatabase {
 					historyList.clear();
 				}
 				history = null;
+				
+				if(historyListChange == false)
+					System.out.println("NO TRANSACTION");
+				
+				historyListChange = false;
 			}
 			
 			else{
