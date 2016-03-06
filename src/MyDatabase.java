@@ -1,12 +1,15 @@
-import java.util.*;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Stack;
+import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 
 public class MyDatabase {
 	
 	public static void main(String[] args) {
-		HashMap<String, Integer> database = new HashMap<String, Integer>();
-		HashMap<Integer, Integer> dbCount = new HashMap<Integer, Integer>();
+		Map<String, Integer> database = new HashMap<String, Integer>();
+		Map<Integer, Integer> dbCount = new HashMap<Integer, Integer>();
 		
 		Stack<String> history = null;
 		Stack<Stack<String>> historyList = new Stack<Stack<String>>(); 
