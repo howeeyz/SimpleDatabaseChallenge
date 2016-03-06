@@ -6,7 +6,7 @@ Guidelines can be found here: https://www.thumbtack.com/challenges/simple-databa
 ## How to Run
 Create a classes folder in the master directory where the repository is cloned.
 Navigate to the bin directory. Ensure the two .bat files have the following line changed to the appropriate JAVA_HOME directory on the machine:
-set JAVA_HOME="<INSERT YOUR JAVA_HOME PATH HERE>"
+set JAVA_HOME="INSERT YOUR JAVA_HOME PATH HERE"
 
 Run CompileMyDatabase.bat to compile the project. Then Run RunMyDatabase.bat to run the project.
 
