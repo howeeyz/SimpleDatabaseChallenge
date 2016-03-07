@@ -49,7 +49,8 @@ public class MyDatabase {
 				name = dbIn.next();
 				value = dbIn.nextInt();
 				
-				historyListChange = true;
+				if(history != null)
+					historyListChange = true;
 				
 				//If this key already exists, need to update the number counter
 				if(database.containsKey(name) == true){
@@ -104,7 +105,9 @@ public class MyDatabase {
 			
 			else if(command.equals("UNSET")){
 				
-				historyListChange = true;
+				if(history != null)				
+					historyListChange = true;
+
 				//Take in value
 				name = dbIn.next();
 				
